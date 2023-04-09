@@ -1,10 +1,16 @@
-import { Client } from 'discord.js';
-import onReady from '~/events/onReady';
+import { client, env } from '~/container';
+import * as events from '~/events';
+import { logHelper } from './helpers/logHelper';
 
-const client = new Client({
-  intents: [],
-});
+(async () => {
+  await client.login(env.discordToken);
 
-onReady(client);
+  Object.entries(events)
+    .map((event) => event[1])
+    .forEach((event) => {
+      if (event.once) client.once(event.name, (...args) => event.execute(...args));
+      else client.on(event.name, (...args) => event.execute(...args));
+    });
 
-client.login(process.env.DISCORD_TOKEN);
+  logHelper.info(`${client.user?.username} is online`);
+})();

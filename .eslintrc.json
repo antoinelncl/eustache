@@ -20,7 +20,8 @@
   "plugins": [
     "@typescript-eslint", 
     "prettier",
-    "import"
+    "import",
+    "unused-imports"
   ],
   "settings": {
     "import/parsers": {
@@ -36,6 +37,7 @@
   "rules": {
     "prettier/prettier": ["error"],
     "no-console": ["error"],
+    "unused-imports/no-unused-imports": "error",
     "import/order": [
       "error",
       {
