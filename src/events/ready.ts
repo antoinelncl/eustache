@@ -1,5 +1,5 @@
 import { Client, Events } from 'discord.js';
-import { logHelper } from '~/helpers/logHelper';
+import { logHelper } from '~/helpers/log-helper';
 import { Event } from '~/types/event';
 
 export const ready: Event = {

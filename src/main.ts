@@ -1,6 +1,6 @@
 import { client, env } from '~/container';
 import * as events from '~/events';
-import { logHelper } from './helpers/logHelper';
+import { logHelper } from './helpers/log-helper';
 
 (async () => {
   await client.login(env.discordToken);

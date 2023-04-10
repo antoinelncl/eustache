@@ -1,5 +1,5 @@
 import { captureException } from '@sentry/node';
-import { logHelper } from '~/helpers/logHelper';
+import { logHelper } from '~/helpers/log-helper';
 
 export const errorHelper = (context: string, err: unknown): void => {
   if (err instanceof Error) {

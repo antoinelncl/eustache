@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction, Events, Interaction } from 'discord.js';
 import * as commands from '~/commands';
-import { errorHelper } from '~/helpers/errorHelper';
-import { logHelper } from '~/helpers/logHelper';
+import { errorHelper } from '~/helpers/error-helper';
+import { logHelper } from '~/helpers/log-helper';
 import { Event } from '~/types/event';
 
 export const interactionCreate: Event = {
