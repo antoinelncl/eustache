@@ -1,6 +1,6 @@
 import { init } from '@sentry/node';
 import { DiscordjsError, DiscordjsErrorCodes } from 'discord.js';
-import { errorHelper } from '~/helpers/errorHelper';
+import { errorHelper } from '~/helpers/error-helper';
 
 export class EnvVarHelper {
   public sentryDsn: string;

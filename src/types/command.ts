@@ -11,6 +11,7 @@ export interface CommandSettings {
   options?: CommandOptions[];
   subCommands?: SubCommands[];
   isDmCommand: boolean;
+  defaultMemberPermission?: bigint;
   errorContext: string;
 }
 

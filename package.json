@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "dev": "ts-node --project tsconfig.json -r dotenv/config src/main.ts",
-    "reload-commands": "ts-node --project tsconfig.json -r dotenv/config src/scripts/deployCommands.ts",
+    "reload-commands": "ts-node --project tsconfig.json -r dotenv/config src/scripts/reload-commands.ts",
     "lint": "eslint ./src"
   },
   "dependencies": {
