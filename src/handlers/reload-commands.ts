@@ -7,6 +7,7 @@ import {
 import { env, rest } from '~/container';
 import { errorHelper } from '~/helpers/error-helper';
 import { logHelper } from '~/helpers/log-helper';
+import { ErrorContext } from '~/types/error';
 
 export const reloadSlashCommandsHandler = async (commandsData: RESTPostAPIChatInputApplicationCommandsJSONBody[]) => {
   try {
@@ -18,6 +19,6 @@ export const reloadSlashCommandsHandler = async (commandsData: RESTPostAPIChatIn
     logHelper.debug(JSON.stringify(data));
     logHelper.info(`Successfully reloaded ${commandsData.length} application (/) commands.`);
   } catch (err) {
-    errorHelper('deployCommands', err);
+    errorHelper(ErrorContext.ReloadCommandsHandler, err);
   }
 };
