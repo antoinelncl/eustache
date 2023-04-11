@@ -14,8 +14,9 @@ export const reloadCommands: Command = {
   run: async function (interaction: CommandInteraction<CacheType>): Promise<void> {
     if (!interaction.isChatInputCommand()) return;
     try {
+      await interaction.deferReply();
       await reloadSlashCommandsHandler(commandsHelper.commandsData);
-      await interaction.reply(`Successfuly reloaded ${commandsHelper.commandsData.length} commands.`);
+      await interaction.followUp(`Successfuly reloaded ${commandsHelper.commandsData.length} commands.`);
     } catch (err) {
       errorHelper(settings.errorContext, err);
     }
