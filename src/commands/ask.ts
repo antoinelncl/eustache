@@ -22,7 +22,7 @@ export const ask: Command = {
         .setRequired(false),
     )
     .setDMPermission(settings.isDmCommand),
-  run: async function (interaction): Promise<void> {
+  run: async (interaction): Promise<void> => {
     if (!interaction.isChatInputCommand()) return;
 
     const channel = interaction.channel as TextChannel;
