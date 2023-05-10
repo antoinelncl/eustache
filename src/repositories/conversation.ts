@@ -45,3 +45,9 @@ export const updateConversation = async (threadId: string, prompt: string, respo
     },
   });
 };
+
+export const deleteConversation = async (threadId: string): Promise<void> => {
+  await prisma.conversation.deleteMany({
+    where: { threadId: threadId },
+  });
+};

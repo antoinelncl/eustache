@@ -1,6 +1,7 @@
 import { Events, Message, ThreadChannel } from 'discord.js';
 import { client, prisma } from '~/container';
 import { handleThreadConversation } from '~/handlers/thread-conversation';
+import { deleteConversation } from '~/repositories/conversation';
 import { Event } from '~/types/event';
 
 export const messageCreate: Event = {
@@ -16,6 +17,7 @@ export const messageCreate: Event = {
       const channel = message.channel as ThreadChannel;
       if (message.content === 'end') {
         channel.delete('end');
+        deleteConversation(channel.id);
         return;
       }
       handleThreadConversation(message);

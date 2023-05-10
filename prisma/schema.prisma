@@ -21,6 +21,6 @@ model Message {
   id             String        @id @default(uuid())
   role           String
   content        String
-  Conversation   Conversation? @relation(fields: [conversationId], references: [id])
+  Conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   conversationId String?
 }
