@@ -1,8 +1,11 @@
 import { ChatCompletionRequestMessage } from 'openai';
-import { openai, history } from '~/container';
+import { openai } from '~/container';
 import { errorHelper } from '~/helpers/error-helper';
 
-export const chatCompletion = async (prompt: string): Promise<string> => {
+export const chatCompletion = async (
+  prompt: string,
+  history: Array<ChatCompletionRequestMessage> = [],
+): Promise<string> => {
   const messages: Array<ChatCompletionRequestMessage> = history;
   const latestMessage: ChatCompletionRequestMessage = { role: 'user', content: prompt };
   messages.push(latestMessage);

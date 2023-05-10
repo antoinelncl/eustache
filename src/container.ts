@@ -1,5 +1,6 @@
+import { PrismaClient } from '@prisma/client';
 import { Client, REST } from 'discord.js';
-import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from 'openai';
+import { Configuration, OpenAIApi } from 'openai';
 import * as commands from '~/commands';
 import { clientOptions } from '~/config/client-options';
 import { EnvVarHelper } from '~/helpers/env-helper';
@@ -22,7 +23,14 @@ const configuration = new Configuration({
   apiKey: env.openAiToken,
 });
 export const openai = new OpenAIApi(configuration);
-export const history: Array<ChatCompletionRequestMessage> = [];
+
+// data
+const prisma = new PrismaClient();
+export const threads = prisma.conversation.findMany().then((conversations) => {
+  return conversations.map((conversation) => {
+    return conversation.threadId;
+  });
+});
 
 // commands
 const commandsArray = Object.entries(commands).map((command) => command[1]);

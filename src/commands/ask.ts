@@ -1,7 +1,9 @@
+import { PrismaClient } from '@prisma/client';
 import { SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandStringOption, TextChannel } from 'discord.js';
 import { askSettings as settings } from '~/config/command-settings/ask-settings';
 import { chatCompletion } from '~/handlers/chat-completion';
 import { errorHelper } from '~/helpers/error-helper';
+import { logHelper } from '~/helpers/log-helper';
 import { Command } from '~/types/command';
 
 export const ask: Command = {
@@ -23,7 +25,7 @@ export const ask: Command = {
     .setDMPermission(settings.isDmCommand),
   run: async function (interaction): Promise<void> {
     if (!interaction.isChatInputCommand()) return;
-
+    const prisma = new PrismaClient();
     const channel = interaction.channel as TextChannel;
     interaction.deferReply();
     try {
@@ -33,8 +35,28 @@ export const ask: Command = {
           const thread = await channel?.threads.create({
             name: prompt,
           });
-          await thread.send(`${await chatCompletion(prompt)}`);
+          const response = await chatCompletion(prompt);
+          await thread.send(`${response}`);
           await interaction.editReply('Thread created');
+          const conversation = await prisma.conversation.create({
+            data: {
+              authorId: interaction.member ? interaction.member.user.id : '',
+              threadId: thread.id,
+              messages: {
+                create: [
+                  {
+                    content: prompt,
+                    role: 'user',
+                  },
+                  {
+                    content: response,
+                    role: 'assistant',
+                  },
+                ],
+              },
+            },
+          });
+          logHelper.debug(JSON.stringify(conversation));
         } else {
           interaction.editReply(`${await chatCompletion(prompt)}`);
         }
