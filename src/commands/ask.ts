@@ -1,9 +1,8 @@
-import { PrismaClient } from '@prisma/client';
 import { SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandStringOption, TextChannel } from 'discord.js';
 import { askSettings as settings } from '~/config/command-settings/ask-settings';
 import { chatCompletion } from '~/handlers/chat-completion';
 import { errorHelper } from '~/helpers/error-helper';
-import { logHelper } from '~/helpers/log-helper';
+import { createConversation } from '~/repositories/conversation';
 import { Command } from '~/types/command';
 
 export const ask: Command = {
@@ -25,40 +24,28 @@ export const ask: Command = {
     .setDMPermission(settings.isDmCommand),
   run: async function (interaction): Promise<void> {
     if (!interaction.isChatInputCommand()) return;
-    const prisma = new PrismaClient();
+
     const channel = interaction.channel as TextChannel;
+    const authorId = interaction.member ? interaction.member.user.id : '';
+
     interaction.deferReply();
+
     try {
       const prompt = interaction.options.getString('prompt');
+
       if (prompt) {
+        const response = await chatCompletion(prompt);
         if (interaction.options.getBoolean('thread')) {
           const thread = await channel?.threads.create({
             name: prompt,
           });
-          const response = await chatCompletion(prompt);
+
           await thread.send(`${response}`);
           await interaction.editReply('Thread created');
-          const conversation = await prisma.conversation.create({
-            data: {
-              authorId: interaction.member ? interaction.member.user.id : '',
-              threadId: thread.id,
-              messages: {
-                create: [
-                  {
-                    content: prompt,
-                    role: 'user',
-                  },
-                  {
-                    content: response,
-                    role: 'assistant',
-                  },
-                ],
-              },
-            },
-          });
-          logHelper.debug(JSON.stringify(conversation));
+
+          createConversation(authorId, thread.id, prompt, response);
         } else {
-          interaction.editReply(`${await chatCompletion(prompt)}`);
+          interaction.editReply(`${response}`);
         }
       } else {
         await interaction.editReply("Couldn't find prompt");

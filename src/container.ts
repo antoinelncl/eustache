@@ -25,11 +25,14 @@ const configuration = new Configuration({
 export const openai = new OpenAIApi(configuration);
 
 // data
-const prisma = new PrismaClient();
-export const threads = prisma.conversation.findMany().then((conversations) => {
-  return conversations.map((conversation) => {
-    return conversation.threadId;
-  });
+export const prisma = new PrismaClient({
+  log: [
+    { level: 'query', emit: 'stdout' },
+    { level: 'warn', emit: 'stdout' },
+    { level: 'info', emit: 'stdout' },
+    { level: 'error', emit: 'stdout' },
+  ],
+  errorFormat: 'pretty',
 });
 
 // commands

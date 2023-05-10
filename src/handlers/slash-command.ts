@@ -2,7 +2,7 @@ import { ChatInputCommandInteraction } from 'discord.js';
 import * as commands from '~/commands';
 import { errorHelper } from '~/helpers/error-helper';
 
-export async function handleSlashCommand(interaction: ChatInputCommandInteraction) {
+export const handleSlashCommand = async (interaction: ChatInputCommandInteraction): Promise<void> => {
   try {
     const command = Object.entries(commands)
       .map((command) => command[1])
@@ -16,4 +16,4 @@ export async function handleSlashCommand(interaction: ChatInputCommandInteractio
   } catch (err) {
     errorHelper(`${interaction.commandName}Command`, err);
   }
-}
+};
